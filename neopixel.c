@@ -45,17 +45,35 @@
 	- Do not use neopixel_set_color_and_show(...) with BLE, instead use uint8_t neopixel_set_color(...);
  */
  
+ //
+ // Modified for micro:bit Arduino by Tamakichi 2018/01/14
+ //
  
+#include <Arduino.h> // add by Tamakichi
+#include "nrf.h"     // add by Tamakichi
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include "nrf_delay.h"
-#include "nrf_gpio.h"
+//#include "nrf_gpio.h"
 #include "neopixel.h"
+
+// Add by Tamakichi <<
+void nrf_gpio_cfg_output(uint8_t ulPin) {
+      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Output       << GPIO_PIN_CNF_DIR_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_PULL_Disabled    << GPIO_PIN_CNF_PULL_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
+                               
+}
+// >>
 
 void neopixel_init(neopixel_strip_t *strip, uint8_t pin_num, uint16_t num_leds)
 {
-	strip->leds = (color_t*) malloc(sizeof(color_t) * num_leds);
+	pin_num = g_ADigitalPinMap[pin_num]; // add by Tamakichi
+  strip->leds = (color_t*) malloc(sizeof(color_t) * num_leds);
 	strip->pin_num = pin_num;
 	strip->num_leds = num_leds;
 	nrf_gpio_cfg_output(pin_num);

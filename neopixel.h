@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "nrf_delay.h"
-#include "nrf_gpio.h"
+//#include "nrf_gpio.h" // Modifed by Tamakichi
 
 
 //These defines are timed specific to a series of if statements and will need to be changed
